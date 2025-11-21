@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.pyc
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# Mac
+.DS_Store
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+*.fls
+*.fdb_latexmk
+*.pdf
+
+# Generated Data (optional, keep if you want to distribute the results)
+processed_data.csv
+factor_scores.csv
+factor_loadings.csv
+feature_importance.csv
+model_comparison.csv
+
+# Generated Plots
+*.png
