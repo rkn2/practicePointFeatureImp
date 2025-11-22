@@ -112,6 +112,27 @@ Where possible, account for temporal structure by including time lags or using t
 %  \end{figure}
 Lastly, watch for outliers—extreme or erroneous data points that distort results. Examine them carefully before removing them. In heritage data, ``extremes" may represent significant events like storms or structural failures worth understanding rather than discarding.
 
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{figures/condition_distribution.png}
+    \caption{Distribution of building condition ratings in the dataset. Understanding the balance of your data (e.g., how many ``Good" vs. ``Poor" buildings) is essential before starting analysis. An imbalanced dataset can bias model predictions.}
+    \label{fig:condition_dist}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/correlation_heatmap.png}
+    \caption{Correlation matrix heatmap showing relationships between variables. Darker red indicates strong positive correlation, while darker blue indicates strong negative correlation. This high-level overview helps identify potential patterns, such as moisture variables correlating with condition.}
+    \label{fig:correlation}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{figures/vif_multicollinearity.png}
+    \caption{Variance Inflation Factor (VIF) scores for predictor variables. VIF values above 5 or 10 indicate high multicollinearity, meaning variables are redundant (e.g., Average Temperature and Temperature Range). Identifying this early ensures statistical rigor.}
+    \label{fig:vif}
+\end{figure}
+
 \section{The ``How-To": Data Featurization}
 
 In this section we focus on  two complementary analytical techniques: \textit{factor analysis} and \textit{feature importance analysis}. 
@@ -165,10 +186,24 @@ Factor analysis proceeds through several steps.
 First, variables are standardized to ensure equal influence regardless of units. 
 Second, the algorithm computes correlations between all variable pairs. 
 Third, it extracts factors that explain correlation patterns—the first factor explains the most variance, the second explains the next-most, and so forth. 
-Fourth, diagnostic tools (scree plots, eigenvalue criteria) determine how many factors to retain.
+Fourth, diagnostic tools (scree plots, eigenvalue criteria) determine how many factors to retain (Figure \ref{fig:scree}).
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\linewidth]{figures/scree_plot.png}
+    \caption{Scree plot used to determine the number of factors to retain. The ``elbow" in the curve (where the line flattens out) suggests the optimal number of factors that capture the most meaningful variation in the data.}
+    \label{fig:scree}
+\end{figure}
 Fifth, you interpret and name the factors based on which variables load strongly (typically |0.6| or higher). 
-If solar radiation, temperature, and thermal expansion load on one factor, label it ``Thermal Stress." 
-Each observation receives a factor score showing how strongly it exhibits each factor. 
+If solar radiation, temperature, and thermal expansion load on one factor, label it ``Thermal Stress" (Figure \ref{fig:loadings}). 
+Each observation receives a factor score showing how strongly it exhibits each factor.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.9\linewidth]{figures/factor_loadings.png}
+    \caption{Factor loadings heatmap. This visualization is key to interpretation, showing which variables cluster together. For example, Factor 1 might show high loadings for moisture-related variables, while Factor 2 groups thermal variables.}
+    \label{fig:loadings}
+\end{figure} 
 
 
 \subsubsection{Interactive Tutorial: Factor Analysis}
@@ -234,12 +269,33 @@ Unlike standard random splits, which can introduce data leakage, heritage datase
 This may involve training on historical periods (e.g., 2010--2017) to test on subsequent years (2018--2020), or training on specific geographic districts to test generalization to others. 
 Once partitioned, ensemble algorithms like Random Forest and Gradient Boosting are employed. 
 These methods construct multiple decision trees to capture the complex, non-linear interactions inherent in the built environment.
-Validation is then performed to assess prediction accuracy against domain-specific benchmarks. 
-In the context of heritage datasets, an $R^2$ value between $0.4$ and $0.6$ typically indicates useful relationships, whereas a value above $0.7$ is excellent but uncommon. 
+Validation is then performed to assess prediction accuracy against domain-specific benchmarks (Figure \ref{fig:regression}). 
+In the context of heritage datasets, an $R^2$ value between $0.4$ and $0.6$ typically indicates useful relationships, whereas a value above $0.7$ is excellent but uncommon.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\linewidth]{figures/multiple_regression.png}
+    \caption{Actual vs. Predicted values from a regression model. Points clustering closely around the red dashed line indicate accurate predictions. Outliers far from the line represent buildings where the model's prediction differed significantly from reality.}
+    \label{fig:regression}
+\end{figure} 
 Similarly, a Mean Absolute Error (MAE) of $0.5$ rating points on a standard $1$--$5$ scale is considered useful for prioritization, even if it lacks the precision required for individual diagnosis. 
 To ensure the stability of these rankings, $5$-fold or $10$-fold cross-validation is recommended.
 Finally, feature importance is computed by measuring the performance loss occurred when a specific variable is removed (permutation importance). 
-These results, ideally visualized as bar charts, should be interpreted in conjunction with preservation expertise.
+These results, ideally visualized as bar charts (Figure \ref{fig:importance}), should be interpreted in conjunction with preservation expertise.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{figures/feature_importance.png}
+    \caption{Feature importance ranking. This chart directly answers ``What drives deterioration?" by ranking variables based on their predictive power. In this example, variables like Soil Moisture and Freeze-Thaw Cycles might appear as top drivers.}
+    \label{fig:importance}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{figures/model_comparison.png}
+    \caption{Comparison of model performance ($R^2$ scores). This justifies the choice of algorithm; for instance, Random Forest often outperforms simple Linear Regression on complex heritage datasets by capturing non-linear relationships.}
+    \label{fig:model_comp}
+\end{figure}
 Furthermore, utilizing the uncertainty estimates provided by algorithms like Random Forests allows for reporting predictions with necessary confidence intervals (e.g., ``$2.5 \pm 0.4$''), resulting in a more transparent analytical output.
 
 \subsubsection{When Interpreting Results}
