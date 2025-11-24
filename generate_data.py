@@ -47,13 +47,24 @@ def generate_heritage_data(n_samples=200):
     # Outcome Variables
     # Condition Rating (1=Good, 5=Poor)
     # Driven by Crack Width, Salt, and Freeze Thaw
-    condition_score = (0.4 * df['Crack_Width_mm'] + 
-                       0.2 * df['Salt_Deposition_g_m2'] + 
-                       0.1 * df['Freeze_Thaw_Cycles'] + 
-                       np.random.normal(0, 1, n_samples))
+    # INCREASED CORRELATION: Made the signal stronger relative to noise
+    condition_score = (0.8 * df['Crack_Width_mm'] + 
+                       0.5 * df['Salt_Deposition_g_m2'] + 
+                       0.3 * df['Freeze_Thaw_Cycles'] + 
+                       0.4 * df['Soil_Moisture_Index'] +
+                       np.random.normal(0, 0.5, n_samples)) # Reduced noise
     
     # Normalize to 1-5 scale
-    df['Condition_Rating'] = pd.qcut(condition_score, 5, labels=[1, 2, 3, 4, 5]).astype(int)
+    # CHANGED: Instead of qcut (which forces equal bins), use cut or direct mapping to get a more natural distribution
+    # This fixes the "40 of each building" issue
+    # Let's map the raw score to 1-5
+    min_score = condition_score.min()
+    max_score = condition_score.max()
+    # Scale to 1-5 range
+    scaled_score = 1 + (condition_score - min_score) * 4 / (max_score - min_score)
+    # Add some noise before rounding to avoid perfect quantization
+    scaled_score = scaled_score + np.random.normal(0, 0.2, n_samples)
+    df['Condition_Rating'] = scaled_score.round().clip(1, 5).astype(int)
     
     # Intervention Urgency (0-100)
     df['Intervention_Urgency'] = (condition_score * 10 + np.random.normal(0, 5, n_samples)).clip(0, 100)
