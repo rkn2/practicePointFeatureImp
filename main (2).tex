@@ -69,29 +69,33 @@ Before you open a computational notebook or run algorithms, plan. Just as you wo
 \subsection{Defining Your Questions}
 
 Dimensionality reduction techniques are powerful but not appropriate for every challenge. They excel when you face complexity: many variables, unclear relationships between factors, uncertainty about which parameters matter most.
-Consider whether your project involves questions like those in Fig~\ref{fig:questions}. If you deal with only two or three variables with clear, well-understood relationships, traditional analytical methods will serve you better. 
-Dimensionality reduction becomes valuable when you juggle ten or more variables and the relationships are not obvious from domain knowledge alone.
-
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=1\linewidth]{figures/questions.png}
-    \caption{Enter Caption}
-    \label{fig:questions}
-\end{figure}
-
-\subsection{Data Requirements}
-
-``Garbage in, garbage out" applies especially to machine learning. The quality and characteristics of your input data determine the reliability of your results.
-Dimensionality reduction works with diverse data types common in preservation practice (Fig~\ref{fig:datatypes}). 
-% The algorithms we discuss require numerical data. Categorical variables—``sandstone" versus ``limestone" or ``north-facing" versus ``south-facing"—must be converted to numerical representations through encoding. 
-% The tutorial notebooks demonstrate this.
-
-\begin{figure}
-    \centering
-    \includegraphics[width=1\linewidth]{figures/dataTypes.png}
-    \caption{Enter Caption}
-    \label{fig:datatypes}
-\end{figure}
+% Consider whether your project involves questions like those in Fig~\ref{fig:questions}. If you deal with only two or three variables with clear, well-understood relationships, traditional analytical methods will serve you better. 
+% Dimensionality reduction becomes valuable when you juggle ten or more variables and the relationships are not obvious from domain knowledge alone.
+% 
+% \begin{comment}
+% \begin{figure}[h]
+%     \centering
+%     \includegraphics[width=1\linewidth]{figures/questions.png}
+%     \caption{Enter Caption}
+%     \label{fig:questions}
+% \end{figure}
+% \end{comment}
+% 
+% \subsection{Data Requirements}
+% 
+% ``Garbage in, garbage out" applies especially to machine learning. The quality and characteristics of your input data determine the reliability of your results.
+% % Dimensionality reduction works with diverse data types common in preservation practice (Fig~\ref{fig:datatypes}). 
+% % The algorithms we discuss require numerical data. Categorical variables—``sandstone" versus ``limestone" or ``north-facing" versus ``south-facing"—must be converted to numerical representations through encoding. 
+% % The tutorial notebooks demonstrate this.
+% 
+% \begin{comment}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=1\linewidth]{figures/dataTypes.png}
+%     \caption{Enter Caption}
+%     \label{fig:datatypes}
+% \end{figure}
+% \end{comment}
 
 Practical experience and statistical literature suggest minimum requirements. 
 For factor analysis, aim for at least 5-10 observations per variable (e.g., 100 observations for 10-20 variables) to achieve stable factor structures. 
