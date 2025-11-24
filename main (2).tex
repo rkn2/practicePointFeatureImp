@@ -133,6 +133,13 @@ Lastly, watch for outliers—extreme or erroneous data points that distort resul
 
 \begin{figure}[h]
     \centering
+    \includegraphics[width=0.85\linewidth]{figures/pairplot.png}
+    \caption{Pairwise scatter plots showing relationships among key continuous variables. The diagonal shows distributions of individual variables, while off-diagonal plots reveal bivariate relationships. This visualization helps identify non-linear patterns and outliers that correlation coefficients alone might miss.}
+    \label{fig:pairplot}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
     \includegraphics[width=0.8\linewidth]{figures/vif_multicollinearity.png}
     \caption{Variance Inflation Factor (VIF) scores for predictor variables. VIF values above 5 or 10 indicate high multicollinearity, meaning variables are redundant (e.g., Average Temperature and Temperature Range). Identifying this early ensures statistical rigor.}
     \label{fig:vif}
@@ -208,6 +215,13 @@ Each observation receives a factor score showing how strongly it exhibits each f
     \includegraphics[width=0.9\linewidth]{figures/factor_loadings.png}
     \caption{Factor loadings heatmap. This visualization is key to interpretation, showing which variables cluster together. For example, Factor 1 might show high loadings for moisture-related variables, while Factor 2 groups thermal variables.}
     \label{fig:loadings}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.75\linewidth]{figures/factor_scores_scatter.png}
+    \caption{Factor scores scatter plot showing how buildings distribute across the first two factors, color-coded by district. Clustering patterns reveal whether certain districts share similar deterioration profiles, while scattered points indicate diverse conditions within districts.}
+    \label{fig:factor_scores}
 \end{figure} 
 
 
@@ -282,6 +296,13 @@ In the context of heritage datasets, an $R^2$ value between $0.4$ and $0.6$ typi
     \includegraphics[width=0.7\linewidth]{figures/multiple_regression.png}
     \caption{Actual vs. Predicted values from a regression model. Points clustering closely around the red dashed line indicate accurate predictions. Outliers far from the line represent buildings where the model's prediction differed significantly from reality.}
     \label{fig:regression}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.65\linewidth]{figures/simple_regression.png}
+    \caption{Simple linear regression of Condition Rating vs. Crack Width. This baseline model using a single predictor demonstrates why multivariate approaches are necessary—the scattered points show that crack width alone explains only part of the variation in building condition.}
+    \label{fig:simple_regression}
 \end{figure} 
 Similarly, a Mean Absolute Error (MAE) of $0.5$ rating points on a standard $1$--$5$ scale is considered useful for prioritization, even if it lacks the precision required for individual diagnosis. 
 To ensure the stability of these rankings, $5$-fold or $10$-fold cross-validation is recommended.
@@ -293,6 +314,13 @@ These results, ideally visualized as bar charts (Figure \ref{fig:importance}), s
     \includegraphics[width=0.8\linewidth]{figures/feature_importance.png}
     \caption{Feature importance ranking. This chart directly answers ``What drives deterioration?" by ranking variables based on their predictive power. In this example, variables like Soil Moisture and Freeze-Thaw Cycles might appear as top drivers.}
     \label{fig:importance}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.8\linewidth]{figures/permutation_importance.png}
+    \caption{Permutation importance scores showing the decrease in model performance when each variable is randomly shuffled. This validation technique confirms that the ranked variables truly contribute to predictions rather than being artifacts of the model's internal structure.}
+    \label{fig:permutation}
 \end{figure}
 
 \begin{figure}[h]
@@ -334,6 +362,20 @@ Computational analysis should be viewed as a tool that supports, rather than sup
 
 
 \subsection{Decision Framework: Reconciling Models with Field Observations}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.7\linewidth]{figures/boxplot_condition_by_material.png}
+    \caption{Distribution of condition ratings by material type. Box plots reveal median values (center line), quartiles (box edges), and outliers (points). Such visualizations help practitioners identify material-specific vulnerabilities and prioritize interventions accordingly.}
+    \label{fig:material_boxplot}
+\end{figure}
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.75\linewidth]{figures/spatial_map.png}
+    \caption{Spatial distribution of predicted condition ratings across building locations. Geographic clustering of high-risk buildings suggests shared environmental exposures (e.g., groundwater, pollution) that warrant district-level interventions rather than building-by-building approaches.}
+    \label{fig:spatial}
+\end{figure}
 
 When model outputs conflict with field observations or domain knowledge, work through the following steps. 
 First, quantify the disagreement. 
@@ -420,42 +462,6 @@ Five Google Colab notebooks provide hands-on training for practitioners with no 
 \textbf{Factor Analysis} (\texttt{02\_factor\_analysis.ipynb}): Bartlett's and KMO tests, scree plot, Varimax rotation, factor loadings; includes discussion of Factor Analysis vs. PCA and rotation choice guidance (Varimax vs. Promax); outputs \texttt{factor\_scores.csv} and \texttt{factor\_loadings.csv}.
 
 \textbf{Feature Importance} (\texttt{03\_feature\_importance.ipynb}): Train-test split with temporal/spatial considerations, Random Forest and Gradient Boosting training, performance evaluation, model comparison; includes guidance on alternative models (Ridge, Lasso, Elastic Net, SVM, Neural Networks, KNN) with decision guide and learning resources; outputs \texttt{feature\_importance.csv} and \texttt{model\_comparison.csv}.
-
-\subsection{Supplementary Visualisations}
-\begin{figure}[h]
-    \centering
-    \begin{subfigure}{0.48\linewidth}
-        \includegraphics[width=\linewidth]{figures/pairplot.png}
-        \caption{Pairwise relationships among key variables.}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.48\linewidth}
-        \includegraphics[width=\linewidth]{figures/simple_regression.png}
-        \caption{Condition vs. Crack Width (simple regression).}
-    \end{subfigure}
-    \\
-    \begin{subfigure}{0.48\linewidth}
-        \includegraphics[width=\linewidth]{figures/factor_scores_scatter.png}
-        \caption{Factor scores scatter coloured by district.}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.48\linewidth}
-        \includegraphics[width=\linewidth]{figures/permutation_importance.png}
-        \caption{Permutation importance confirming variable impact.}
-    \end{subfigure}
-    \\
-    \begin{subfigure}{0.48\linewidth}
-        \includegraphics[width=\linewidth]{figures/boxplot_condition_by_material.png}
-        \caption{Condition rating by material type.}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}{0.48\linewidth}
-        \includegraphics[width=\linewidth]{figures/spatial_map.png}
-        \caption{Spatial distribution of condition ratings.}
-    \end{subfigure}
-    \caption{Additional visualisations that support the main analysis.}
-    \label{fig:supplementary}
-\end{figure}
 
 \textbf{Visualization} (\texttt{04\_visualization.ipynb}): Correlation heatmaps, distribution plots, boxplots, pairplots, summary statistics; saves all plots as 300 DPI PNG files for publication.
 
