@@ -1,6 +1,7 @@
 \documentclass[12pt]{article}
 \usepackage{graphicx} % Required for inserting images
 \usepackage{subcaption} % Required for subfigures
+\usepackage{float} % Required for [H] figure placement
 \usepackage{mathptmx} % Times-like font
 \usepackage{setspace} % Required for setting line spacing
 \usepackage[margin=1in]{geometry} % 1-inch margins all around
@@ -72,7 +73,7 @@ Dimensionality reduction techniques are powerful but not appropriate for every c
 % Dimensionality reduction becomes valuable when you juggle ten or more variables and the relationships are not obvious from domain knowledge alone.
 % 
 % \begin{comment}
-% \begin{figure}[h]
+% \begin{figure}[H]
 %     \centering
 %     \includegraphics[width=1\linewidth]{figures/questions.png}
 %     \caption{Enter Caption}
@@ -115,7 +116,7 @@ Lastly, watch for outliers, extreme or erroneous data points that distort result
 Figure \ref{fig:condition_dist} shows the distribution of condition ratings in the example dataset for this practice point, which helps identify potential imbalances that could bias predictions.
 
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{figures/condition_distribution.png}
     \caption{Distribution of building condition ratings in the dataset. Understanding the balance of your data (e.g., how many ``Good" vs. ``Poor" buildings) is essential before starting analysis. An imbalanced dataset can bias model predictions.}
@@ -132,21 +133,21 @@ For a more detailed view of relationships, pairwise scatter plots (Figure \ref{f
 Before proceeding to analysis, check for multicollinearity using Variance Inflation Factor scores (Figure \ref{fig:vif}), which identify redundant variables that should be removed or combined; the \texttt{01\_simple\_statistics.ipynb} notebook provides VIF calculation and interpretation guidance. 
 
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.9\linewidth]{figures/correlation_heatmap.png}
     \caption{Correlation matrix heatmap showing relationships between variables. Darker red indicates strong positive correlation, while darker blue indicates strong negative correlation. This high-level overview helps identify potential patterns, such as moisture variables correlating with condition.}
     \label{fig:correlation}
 \end{figure}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.85\linewidth]{figures/pairplot.png}
     \caption{Pairwise scatter plots showing relationships among key continuous variables. The diagonal shows distributions of individual variables, while off-diagonal plots reveal bivariate relationships. This visualization helps identify non-linear patterns and outliers that correlation coefficients alone might miss. Note that all variables have been standardized (scaled to mean = 0, standard deviation = 1) for comparability, which is why some variables show negative values.}
     \label{fig:pairplot}
 \end{figure}
 
-\begin{figure}[htbp]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{figures/vif_multicollinearity.png}
     \caption{Variance Inflation Factor (VIF) scores for predictor variables. VIF values above 5 or 10 indicate high multicollinearity, meaning variables are redundant (e.g., Average Temperature and Temperature Range). Identifying this early ensures statistical rigor.}
@@ -208,7 +209,7 @@ Second, the algorithm computes correlations between all variable pairs.
 Third, it extracts factors that explain correlation patterns. The first factor explains the most variance, the second explains the next-most, and so forth. 
 Fourth, diagnostic tools determine how many factors to retain. The scree plot (Figure \ref{fig:scree}) shows where additional factors stop adding meaningful information.
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.7\linewidth]{figures/scree_plot.png}
     \caption{Scree plot used to determine the number of factors to retain. The ``elbow" in the curve (where the line flattens out) suggests the optimal number of factors that capture the most meaningful variation in the data.}
@@ -217,7 +218,7 @@ Fourth, diagnostic tools determine how many factors to retain. The scree plot (F
 Fifth, you interpret and name the factors based on which variables load strongly (typically 0.6 or higher). 
 If solar radiation, temperature, and thermal expansion load on one factor, label it ``Thermal Stress" (Figure \ref{fig:loadings}). 
 Each observation receives a factor score showing how strongly it exhibits each factor.
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.9\linewidth]{figures/factor_loadings.png}
     \caption{Factor loadings heatmap. This visualization is key to interpretation, showing which variables cluster together. For example, Factor 1 might show high loadings for moisture-related variables, while Factor 2 groups thermal variables.}
@@ -227,7 +228,7 @@ Once factors are identified and named, you can visualize how individual building
 Figure \ref{fig:factor_scores} shows buildings plotted by their scores on the first two factors, color-coded by district.
 Clustering patterns reveal whether certain districts share similar deterioration profiles, while scattered points indicate diverse conditions within districts.
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.75\linewidth]{figures/factor_scores_scatter.png}
     \caption{Factor scores scatter plot showing how buildings distribute across the first two factors, color-coded by district. Clustering patterns reveal whether certain districts share similar deterioration profiles, while scattered points indicate diverse conditions within districts.}
@@ -300,14 +301,14 @@ Validation is then performed to assess prediction accuracy against domain-specif
 In the context of heritage datasets, an $R^2$ value between $0.4$ and $0.6$ typically indicates useful relationships, whereas a value above $0.7$ is excellent but uncommon.
 Figure \ref{fig:regression} shows actual versus predicted values for a multivariate model, while Figure \ref{fig:simple_regression} demonstrates the limited explanatory power of single-variable approaches.
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.7\linewidth]{figures/multiple_regression.png}
     \caption{Actual vs. Predicted values from a regression model. Points clustering closely around the red dashed line indicate accurate predictions. Outliers far from the line represent buildings where the model's prediction differed significantly from reality.}
     \label{fig:regression}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.65\linewidth]{figures/simple_regression.png}
     \caption{Simple linear regression of Condition Rating vs. Crack Width. This baseline model using a single predictor demonstrates why multivariate approaches are necessary. The scattered points show that crack width alone explains only part of the variation in building condition.}
@@ -319,19 +320,19 @@ Finally, feature importance is computed by measuring the performance loss occurr
 These results, ideally visualized as bar charts (Figure \ref{fig:importance}), should be interpreted in conjunction with preservation expertise.
 To validate that importance rankings reflect true predictive power rather than model artifacts, permutation importance (Figure \ref{fig:permutation}) measures performance loss when each variable is shuffled.
 Finally, comparing multiple model types (Figure \ref{fig:model_comp}) justifies algorithm selection and reveals whether simpler approaches might suffice.
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{figures/feature_importance.png}
     \caption{Feature importance ranking. This chart directly answers ``What drives deterioration?" by ranking variables based on their predictive power. In this example, variables like Soil Moisture and Freeze-Thaw Cycles might appear as top drivers.}
     \label{fig:importance}
 \end{figure}
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{figures/permutation_importance.png}
     \caption{Permutation importance scores showing the decrease in model performance when each variable is randomly shuffled. This validation technique confirms that the ranked variables truly contribute to predictions rather than being artifacts of the model's internal structure.}
     \label{fig:permutation}
 \end{figure}
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.8\linewidth]{figures/model_comparison.png}
     \caption{Comparison of model performance ($R^2$ scores). This justifies the choice of algorithm; for instance, Random Forest often outperforms simple Linear Regression on complex heritage datasets by capturing non-linear relationships.}
@@ -377,14 +378,14 @@ When translating model outputs into intervention priorities, visualizations help
 Figure \ref{fig:material_boxplot} shows how condition ratings vary by material type, revealing material-specific vulnerabilities.
 Figure \ref{fig:spatial} maps predicted risk across building locations; geographic clustering of high-risk buildings suggests shared environmental exposures that warrant district-level rather than building-by-building interventions.
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.7\linewidth]{figures/boxplot_condition_by_material.png}
     \caption{Distribution of condition ratings by material type. Box plots reveal median values (center line), quartiles (box edges), and outliers (points). Such visualizations help practitioners identify material-specific vulnerabilities and prioritize interventions accordingly.}
     \label{fig:material_boxplot}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[H]
     \centering
     \includegraphics[width=0.75\linewidth]{figures/spatial_map.png}
     \caption{Spatial distribution of predicted condition ratings across building locations. Geographic clustering of high-risk buildings suggests shared environmental exposures (e.g., groundwater, pollution) that warrant district-level interventions rather than building-by-building approaches.}
