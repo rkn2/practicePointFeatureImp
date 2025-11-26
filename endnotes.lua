@@ -18,12 +18,8 @@ function Note(el)
   local anchor = "endnote-" .. num
   local backlink = "ref-" .. num
   
-  -- Create the marker in the text: [1] or just superscript 1
-  -- Chicago style usually uses superscript numbers.
-  return pandoc.Span(
-    {pandoc.Link(pandoc.Str(tostring(num)), "#" .. anchor)},
-    {id = backlink, class = "endnote-ref", style = "vertical-align: super; font-size: smaller;"}
-  )
+  -- Create the marker in the text: superscript number
+  return pandoc.Superscript(pandoc.Link(pandoc.Str(tostring(num)), "#" .. anchor))
 end
 
 function Pandoc(doc)
