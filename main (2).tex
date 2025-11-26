@@ -7,6 +7,7 @@
 \usepackage{outlines}
 \usepackage{comment}
 \usepackage{hyperref} % For linking to notebooks
+\usepackage{color,soul}
 
 \hypersetup{
     colorlinks=true,
@@ -24,7 +25,7 @@
 
 \maketitle
 
-\noindent \textbf{Abstract:} Heritage practitioners now collect unprecedented volumes of data--environmental sensors, structural surveys, climate records--yet often struggle to translate this information into clear conservation priorities. 
+\noindent \textbf{Abstract:} Heritage practitioners now collect unprecedented volumes of data, such as environmental sensors, structural surveys, climate records, yet often struggle to translate this information into clear conservation priorities. 
 This practice point demonstrates how machine learning techniques can identify the environmental and structural variables most strongly associated with deterioration, enabling practitioners to focus limited resources where they will have the greatest impact. 
 We present factor analysis for exploratory pattern discovery and feature importance analysis for predictive modeling, with step-by-step interactive tutorials requiring no programming experience. 
 These tools guide users from data upload through result interpretation, supporting evidence-based decision-making at scales ranging from individual components to entire districts.
@@ -38,22 +39,19 @@ Thousands of data points. Dozens of variables. One question: where do you start?
 This scenario appears everywhere in preservation now. Digital documentation tools, environmental sensors, and GIS systems have become standard practice. 
 We drown in data but starve for insights! 
 The old approach of eyeballing a handful of variables and making gut-check comparisons breaks down when you juggle dozens of interrelated parameters.
-
 Here is where dimensionality reduction techniques can help; these techniques take messy, complex datasets and distill them to what matters. 
 Instead of examining each variable alone, they reveal underlying relationships and quantify which factors most influence outcomes: structural deterioration, material decay, climate vulnerability.
 
-Data-driven analysis is not new to preservation; we have done quantitative work for decades. 
+Data-driven analysis is not new to preservation; we have done quantitative work for decades \cite{mikesell1986, unesco2014}.
 What has changed is scale and accessibility.
-Modern machine learning algorithms process datasets impossible to handle twenty years ago; cloud-based platforms like Google Colab eliminate the need for specialized software or expensive infrastructure; most important, we can now make these tools accessible to practitioners who have never written code.
+Modern machine learning algorithms process datasets impossible to handle twenty years ago \cite{amb2025}; cloud-based platforms like Google Colab \cite{googlecolab2025} eliminate the need for specialized software or expensive infrastructure; most important, we can now make these tools accessible to practitioners who have never written code \cite{neurond2024}.
 
 This practice point introduces two complementary techniques: \textit{factor analysis} for exploratory pattern discovery and \textit{feature importance analysis} for predictive modeling. 
 These serve distinct but related purposes. 
 Factor analysis helps you understand the structure of your data, discovering, for example, that humidity, rainfall, and groundwater levels form a coherent ``moisture-related" pattern. Feature importance analysis addresses a different question: given a specific outcome (like condition rating), which variables best predict it?
 % We use factor analysis rather than Principal Component Analysis (PCA) because preservation practitioners benefit from interpretable, rotated factors that align with physical deterioration mechanisms. While PCA maximizes variance explained, factor analysis with rotation (like Varimax) produces factors that more clearly correspond to real-world processes—moisture exposure, thermal cycling, structural aging. This interpretability matters when communicating findings to stakeholders and translating results into conservation strategies.
 These techniques can be applied at any scale. 
-At the component level, they identify which environmental conditions most affect specific materials or structural elements. 
-At the building scale, they prioritize interventions based on factors threatening overall integrity. 
-At the district or city scale, they allocate resources across multiple sites by identifying shared vulnerabilities and site-specific risks.
+At the component level, they identify which environmental conditions most affect specific materials or structural elements; at the building scale, they prioritize interventions based on factors threatening overall integrity; at the district or city scale, they allocate resources across multiple sites by identifying shared vulnerabilities and site-specific risks.
 
 In this practice point, we start with project planning to help you determine whether these techniques suit your project and what data you need. 
 Then we explain factor analysis and feature importance mechanics, with interactive notebooks guiding you through implementation. 
@@ -69,7 +67,7 @@ Before you open a computational notebook or run algorithms, plan. Just as you wo
 
 \subsection{Defining Your Questions}
 
-Dimensionality reduction techniques are powerful but not appropriate for every challenge. They excel when you face complexity: many variables, unclear relationships between factors, uncertainty about which parameters matter most.
+Dimensionality reduction techniques are powerful but not appropriate for every challenge. They excel when you face complexity: many variables, unclear relationships between factors, uncertainty about which parameters matter most \cite{wani2025, fodor2002}.
 % Consider whether your project involves questions like those in Fig~\ref{fig:questions}. If you deal with only two or three variables with clear, well-understood relationships, traditional analytical methods will serve you better. 
 % Dimensionality reduction becomes valuable when you juggle ten or more variables and the relationships are not obvious from domain knowledge alone.
 % 
@@ -97,11 +95,9 @@ Dimensionality reduction techniques are powerful but not appropriate for every c
 %     \label{fig:datatypes}
 % \end{figure}
 % \end{comment}
-
-Practical experience and statistical literature suggest minimum requirements. 
-For factor analysis, aim for at least 5-10 observations per variable (e.g., 100 observations for 10-20 variables) to achieve stable factor structures. 
-For Random Forest models, 30 observations is the absolute minimum, but 100+ observations yield more reliable importance rankings. 
-With smaller samples, results become unstable and may not replicate.
+Practical experience and statistical literature suggest minimum requirements.
+For factor analysis, aim for at least 5-10 observations per variable (e.g., 100 observations for 10-20 variables) to achieve stable factor structures \cite{gracemartin2021}. 
+For Random Forest models, 30 observations is the absolute minimum, but 100+ observations yield more reliable importance rankings \cite{wang2016}. With smaller samples, results become unstable and may not replicate \cite{calle2010}.
 
 Beyond quantity, data quality matters enormously. 
 Were all variables measured using the same protocols, instruments, and units? 
@@ -115,8 +111,9 @@ Where possible, account for temporal structure by including time lags or using t
 %      \caption{Enter Caption}
 %      \label{fig:mins}
 %  \end{figure}
-Lastly, watch for outliers, extreme or erroneous data points that distort results. Examine them carefully before removing them. In heritage data, ``extremes" may represent significant events like storms or structural failures worth understanding rather than discarding.
-Figure \ref{fig:condition_dist} shows the distribution of condition ratings in your dataset, which helps identify potential imbalances that could bias predictions.
+Lastly, watch for outliers, extreme or erroneous data points that distort results. Examine them carefully before removing them; in heritage data, ``extremes" may represent significant events like storms or structural failures worth understanding rather than discarding.
+Figure \ref{fig:condition_dist} shows the distribution of condition ratings in the example dataset for this practice point, which helps identify potential imbalances that could bias predictions.
+
 
 \begin{figure}[h]
     \centering
@@ -124,26 +121,32 @@ Figure \ref{fig:condition_dist} shows the distribution of condition ratings in y
     \caption{Distribution of building condition ratings in the dataset. Understanding the balance of your data (e.g., how many ``Good" vs. ``Poor" buildings) is essential before starting analysis. An imbalanced dataset can bias model predictions.}
     \label{fig:condition_dist}
 \end{figure}
+    \label{fig:condition_dist}
+\end{figure}
 
-Start by examining correlation patterns (Figure \ref{fig:correlation}) to identify which variables move together.
+\subsection{Exploratory Data Visualization}
+Before applying dimensionality reduction techniques, examine your data's structure through three complementary visualizations. The following exploratory visualizations (Figures \ref{fig:correlation}--\ref{fig:vif}) should be examined before proceeding to formal analysis, as they reveal data structure and potential issues requiring attention.
+
+Start by examining correlation patterns (Figure \ref{fig:correlation}) to identify which variables move together; these visualizations are generated in the \texttt{04\_visualization.ipynb} notebook and the \texttt{01\_simple\_statistics.ipynb} notebook includes correlation analysis tools.
 For a more detailed view of relationships, pairwise scatter plots (Figure \ref{fig:pairplot}) reveal non-linear patterns and outliers that simple correlation coefficients miss.
-Before proceeding to analysis, check for multicollinearity using Variance Inflation Factor scores (Figure \ref{fig:vif}), which identify redundant variables that should be removed or combined.
+Before proceeding to analysis, check for multicollinearity using Variance Inflation Factor scores (Figure \ref{fig:vif}), which identify redundant variables that should be removed or combined; the \texttt{01\_simple\_statistics.ipynb} notebook provides VIF calculation and interpretation guidance. 
 
-\begin{figure}[h]
+
+\begin{figure}[htbp]
     \centering
     \includegraphics[width=0.9\linewidth]{figures/correlation_heatmap.png}
     \caption{Correlation matrix heatmap showing relationships between variables. Darker red indicates strong positive correlation, while darker blue indicates strong negative correlation. This high-level overview helps identify potential patterns, such as moisture variables correlating with condition.}
     \label{fig:correlation}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[htbp]
     \centering
     \includegraphics[width=0.85\linewidth]{figures/pairplot.png}
-    \caption{Pairwise scatter plots showing relationships among key continuous variables. The diagonal shows distributions of individual variables, while off-diagonal plots reveal bivariate relationships. This visualization helps identify non-linear patterns and outliers that correlation coefficients alone might miss.}
+    \caption{Pairwise scatter plots showing relationships among key continuous variables. The diagonal shows distributions of individual variables, while off-diagonal plots reveal bivariate relationships. This visualization helps identify non-linear patterns and outliers that correlation coefficients alone might miss. Note that all variables have been standardized (scaled to mean = 0, standard deviation = 1) for comparability, which is why some variables show negative values.}
     \label{fig:pairplot}
 \end{figure}
 
-\begin{figure}[h]
+\begin{figure}[htbp]
     \centering
     \includegraphics[width=0.8\linewidth]{figures/vif_multicollinearity.png}
     \caption{Variance Inflation Factor (VIF) scores for predictor variables. VIF values above 5 or 10 indicate high multicollinearity, meaning variables are redundant (e.g., Average Temperature and Temperature Range). Identifying this early ensures statistical rigor.}
@@ -157,18 +160,18 @@ While the mathematical details happen behind the scenes in the computational not
 The workflow follows three stages. 
 First, data preparation organizes your dataset, handles missing values, and standardizes variables for fair comparison. 
 Second, analysis applies algorithms to identify patterns (factor analysis) or rank importance (feature importance). 
-Third, interpretation translates numerical outputs into preservation insights (a process we detail in Section 4). 
+Third, interpretation translates numerical outputs into preservation insights (a process we detail in Section \ref{interpretation}). 
 This section focuses on the analytical techniques themselves.
 
 \subsection{Factor Analysis}
 
 \subsubsection{What It Does}
 
-Factor analysis explores patterns and relationships among parameters affecting structures, but note that these are \textit{correlational} patterns, not causal mechanisms. 
+Factor analysis explores patterns and relationships among parameters affecting structures, but note that these are \textit{correlational} patterns, not \textit{causal} mechanisms \cite{palomares2024, frost2023}. 
 When you measure many variables such as temperature, humidity, wind exposure, material properties, structural dimensions, these variables are rarely independent.
 Temperature and humidity vary together with seasonal patterns; wind exposure and salt deposition co-occur at coastal sites; soil moisture and groundwater levels fluctuate in coordination.
 
-Factor analysis identifies clusters of variables that vary together, revealing hidden structures. We identify and extract factors that \textit{correlate with} structural behavior. 
+Factor analysis identifies clusters of variables that vary together, revealing hidden structures \cite{goretzko2021}. We identify and extract factors that \textit{correlate with} structural behavior. 
 These factors represent overarching patterns that account for observed correlations among parameters. 
 Understanding \textit{why} these correlations exist requires domain expertise; the statistical method only reveals \textit{that} they exist.
 
@@ -199,7 +202,7 @@ In that last case, feature importance analysis (discussed next) may suit you bet
 
 \subsubsection{The Process}
 
-Factor analysis proceeds through several steps. 
+Factor analysis proceeds through several steps \cite{williams2010}. 
 First, variables are standardized to ensure equal influence regardless of units. 
 Second, the algorithm computes correlations between all variable pairs. 
 Third, it extracts factors that explain correlation patterns. The first factor explains the most variance, the second explains the next-most, and so forth. 
@@ -211,10 +214,9 @@ Fourth, diagnostic tools determine how many factors to retain. The scree plot (F
     \caption{Scree plot used to determine the number of factors to retain. The ``elbow" in the curve (where the line flattens out) suggests the optimal number of factors that capture the most meaningful variation in the data.}
     \label{fig:scree}
 \end{figure}
-Fifth, you interpret and name the factors based on which variables load strongly (typically |0.6| or higher). 
+Fifth, you interpret and name the factors based on which variables load strongly (typically 0.6 or higher). 
 If solar radiation, temperature, and thermal expansion load on one factor, label it ``Thermal Stress" (Figure \ref{fig:loadings}). 
 Each observation receives a factor score showing how strongly it exhibits each factor.
-
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.9\linewidth]{figures/factor_loadings.png}
@@ -243,15 +245,15 @@ The notebook uses a synthetic dataset of 200 heritage buildings with 9 environme
 
 \subsubsection{What It Does}
 
-While factor analysis identifies groups of related variables, feature importance analysis ranks individual variables by their predictive power for specific outcomes (deterioration severity, maintenance costs, intervention timing). The technique trains machine learning models (in this case Random Forest or Gradient Boosting) to learn relationships between input variables and target outcomes. 
-These ensemble methods construct multiple decision trees and aggregate results to determine which parameters matter most.
-Unlike simpler statistical approaches, these models automatically capture variable interactions. 
+While factor analysis identifies groups of related variables, feature importance analysis ranks individual variables by their predictive power for specific outcomes \cite{saarela2021} (deterioration severity, maintenance costs, intervention timing). The technique trains machine learning models (in this case Random Forest \cite{breiman2001} or Gradient Boosting \cite{friedman2001}) to learn relationships between input variables and target outcomes. 
+These ensemble methods construct multiple decision trees and aggregate results to determine which parameters matter most \cite{zhou2021}.
+Unlike simpler statistical approaches, these models automatically capture variable interactions \cite{basu2018}. 
 High humidity alone may not predict deterioration, but combined with temperature fluctuations it might strongly predict decay. 
 After training, the models measure how much predictive power would be lost if each variable were removed. 
 Variables whose removal causes large performance drops are deemed more important. Importance scores range from 0 to 1, with higher values indicating greater predictive power.
 
 The ranking generated by these machine learning models guides the prioritization of conditions and factors within each category. 
-Parameters identified as highly significant could be given priority attention in subsequent preservation and intervention strategies. 
+Parameters identified as highly significant could be given priority attention in subsequent preservation and intervention strategies \cite{KALLAS2024, Kallas2025a, KALLAS2025b}. 
 If the analysis reveals that groundwater level is the strongest predictor of foundation deterioration, monitoring and managing groundwater can become the top priority.
 
 Feature importance analysis is an iterative process, where the models are trained and evaluated using historical data and domain expertise. 
@@ -272,15 +274,13 @@ Third, use this technique when complex relationships are suspected.
 If multiple variables interact in nonlinear ways, traditional regression assumes linear relationships and requires you to specify interactions. 
 Random Forests and Gradient Boosting automatically detect nonlinear patterns and interactions.
 Lastly, this method matters when predictive accuracy counts. 
-If you want not just to understand relationships but also to predict future outcomes. 
-(``Given current conditions, which buildings will require intervention in the next five years?")
+If you want not just to understand relationships but also to predict future outcomes (``Given current conditions, which buildings will require intervention in the next five years?").
 
-Feature importance is less appropriate when you lack outcome data, when you have very few observations (fewer than 30), or when relationships are simple enough that traditional statistical methods suffice. 
+Feature importance is less appropriate when you lack outcome data, when you have very few observations (fewer than 30), or when relationships are simple enough that traditional statistical methods suffice \cite{gulati, ewald2024}. 
 It's also less useful when variables are highly collinear, when several variables measure nearly the same thing, because the model may distribute their importance unevenly.
 When variables are highly correlated (multicollinear), feature importance rankings become unstable. 
-You can check for multicollinearity by calculating Variance Inflation Factor (VIF) for each variable. Values above 10 indicate severe collinearity. 
+You can check for multicollinearity by calculating Variance Inflation Factor (VIF) for each variable. Values above 10 indicate severe collinearity \cite{pennstate2025}. 
 In such cases, consider removing redundant variables (e.g., keep annual rainfall but remove monthly rainfall averages), using factor scores from factor analysis as inputs, or accepting that importance rankings may vary but focusing only on the top 3-5 features that consistently rank high across different model runs.
-
 The notebooks implement both Random Forests and Gradient Boosting, which work similarly but have different strengths explored in the notebook. 
 We recommend running both models and comparing their feature importance rankings. 
 If both models identify the same top variables as most important, you can be confident in those findings. 
@@ -314,26 +314,23 @@ Figure \ref{fig:regression} shows actual versus predicted values for a multivari
     \label{fig:simple_regression}
 \end{figure} 
 Similarly, a Mean Absolute Error (MAE) of $0.5$ rating points on a standard $1$--$5$ scale is considered useful for prioritization, even if it lacks the precision required for individual diagnosis. 
-To ensure the stability of these rankings, $5$-fold or $10$-fold cross-validation is recommended.
-Finally, feature importance is computed by measuring the performance loss occurred when a specific variable is removed (permutation importance). 
+To ensure the stability of these rankings, $5$-fold or $10$-fold cross-validation is recommended \cite{bhagat2025}.
+Finally, feature importance is computed by measuring the performance loss occurred when a specific variable is removed (permutation importance \cite{saarela2021}). 
 These results, ideally visualized as bar charts (Figure \ref{fig:importance}), should be interpreted in conjunction with preservation expertise.
 To validate that importance rankings reflect true predictive power rather than model artifacts, permutation importance (Figure \ref{fig:permutation}) measures performance loss when each variable is shuffled.
 Finally, comparing multiple model types (Figure \ref{fig:model_comp}) justifies algorithm selection and reveals whether simpler approaches might suffice.
-
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\linewidth]{figures/feature_importance.png}
     \caption{Feature importance ranking. This chart directly answers ``What drives deterioration?" by ranking variables based on their predictive power. In this example, variables like Soil Moisture and Freeze-Thaw Cycles might appear as top drivers.}
     \label{fig:importance}
 \end{figure}
-
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\linewidth]{figures/permutation_importance.png}
     \caption{Permutation importance scores showing the decrease in model performance when each variable is randomly shuffled. This validation technique confirms that the ranked variables truly contribute to predictions rather than being artifacts of the model's internal structure.}
     \label{fig:permutation}
 \end{figure}
-
 \begin{figure}[h]
     \centering
     \includegraphics[width=0.8\linewidth]{figures/model_comparison.png}
@@ -344,9 +341,11 @@ Furthermore, utilizing the uncertainty estimates provided by algorithms like Ran
 
 \subsubsection{When Interpreting Results}
 
-Never treat computational outputs as infallible. Always validate results through site inspections and material testing. If model outputs conflict with field observations, re-examine your data. Feature importance provides rankings of influence, not proof of causation. High importance indicates correlation, not necessarily direct causation.
-
-Combine computational results with field expertise. View rankings as guides for investigation, not definitive conclusions. High-importance variables often cluster together, indicating broader mechanisms like moisture-related stress. The value lies in prioritization: deciding where to focus monitoring or intervention.
+Never treat computational outputs as infallible; always validate results through site inspections and material testing. 
+If model outputs conflict with field observations, re-examine your data. Feature importance provides rankings of influence, not proof of causation. 
+High importance indicates correlation, not necessarily direct causation.
+Combine computational results with field expertise; view rankings as guides for investigation, not definitive conclusions. High-importance variables often cluster together, indicating broader mechanisms like moisture-related stress. 
+The value lies in prioritization: deciding where to focus monitoring or intervention.
 
 \subsubsection{Interactive Tutorial: Feature Importance}
 
@@ -362,7 +361,7 @@ In terms of protocol, you can begin with factor analysis to identify underlying 
 Then you can apply feature importance to rank specific variables driving observed outcomes. 
 When variables grouped by factor analysis also rank highly in feature importance, confidence in interpretation can increase whereas discrepancies can prompt further investigation.
 
-\section{Implementation: Interpreting and Using the Results}
+\section{Implementation: Interpreting and Using the Results} \label{interpretation}
 
 Running algorithms represents only the initial phase; the more significant challenge involves translating quantitative outputs into decisive action.
 While computational models excel at highlighting patterns, their findings require validation through professional judgment and comparison with field observations. 
@@ -441,30 +440,31 @@ A reasonable schedule is annual retraining if you collect continuous monitoring 
 If MAE increases by 50\% or more, your model may have become outdated due to changing conditions, a phenomenon called concept drift. 
 For datasets spanning decades, recent 10-15 year rolling windows often perform better than cumulative data because they prioritize current conditions over historical patterns that may no longer apply.
 
-\subsection{When NOT to Use These Tools}
+% \subsection{When NOT to Use These Tools}}
+% redundant 
 
-These methods are not appropriate for every situation. Recognize when simpler approaches or different methods serve you better.
-With fewer than 50 observations, or with more than 30\% missing data, results become unreliable. Simple correlation analysis or expert judgment may be more appropriate in these cases. 
-If your data have serious quality issues like inconsistent measurement protocols, unknown sensor calibration, mixed units then you must fix the data collection process before attempting sophisticated analysis. 
-No algorithm can compensate for fundamentally flawed data.
+% These methods are not appropriate for every situation. Recognize when simpler approaches or different methods serve you better.
+% With fewer than 50 observations, or with more than 30\% missing data, results become unreliable. Simple correlation analysis or expert judgment may be more appropriate in these cases. 
+% If your data have serious quality issues like inconsistent measurement protocols, unknown sensor calibration, mixed units then you must fix the data collection process before attempting sophisticated analysis. 
+% No algorithm can compensate for fundamentally flawed data.
 
-If you have only 2-3 well-understood variables with clear relationships to outcomes, traditional regression or simple comparison methods will be faster, more transparent, and easier to explain to stakeholders. 
-Machine learning adds complexity without benefit in such straightforward cases. 
-Similarly, these models cannot reliably predict outside the range of conditions in your training data. 
-If your historical data cover moderate climate conditions (10-25°C), the model will not help predict deterioration under extreme heat (35°C+) or unprecedented freeze events. 
-For climate change scenarios or novel stressors, physics-based models or expert judgment are more appropriate.
+% If you have only 2-3 well-understood variables with clear relationships to outcomes, traditional regression or simple comparison methods will be faster, more transparent, and easier to explain to stakeholders. 
+% Machine learning adds complexity without benefit in such straightforward cases. 
+% Similarly, these models cannot reliably predict outside the range of conditions in your training data. 
+% If your historical data cover moderate climate conditions (10-25°C), the model will not help predict deterioration under extreme heat (35°C+) or unprecedented freeze events. 
+% For climate change scenarios or novel stressors, physics-based models or expert judgment are more appropriate.
 
-If you need to understand \textit{why} deterioration occurs or test specific hypotheses about mechanisms, these pattern-matching tools are insufficient. 
-They identify correlations, not causes. Material science experiments, controlled interventions, or causal inference methods (like propensity score matching or instrumental variables) are required for causal questions. 
-Do not use these tools alone to justify demolition, major structural interventions, or other irreversible actions. 
-They are hypothesis-generating tools, not decision-making oracles. 
-Always combine computational analysis with site inspections, material testing, structural engineering assessment, and peer review.
+% If you need to understand \textit{why} deterioration occurs or test specific hypotheses about mechanisms, these pattern-matching tools are insufficient. 
+% They identify correlations, not causes. Material science experiments, controlled interventions, or causal inference methods (like propensity score matching or instrumental variables) are required for causal questions. 
+% Do not use these tools alone to justify demolition, major structural interventions, or other irreversible actions. 
+% They are hypothesis-generating tools, not decision-making oracles. 
+% Always combine computational analysis with site inspections, material testing, structural engineering assessment, and peer review.
 
-If algorithmic recommendations could expose you to professional liability, proceed with extreme caution. 
-Document all assumptions, validate results extensively, and ensure human expert oversight. 
-In legal or regulatory contexts, simpler and more transparent methods may be preferable. 
-Finally, if you lack time to properly validate results, expertise to interpret outputs carefully, or resources to collect additional data when models reveal gaps, simpler methods may serve you better. 
-A well-executed simple analysis beats a poorly executed sophisticated one.
+% If algorithmic recommendations could expose you to professional liability, proceed with extreme caution. 
+% Document all assumptions, validate results extensively, and ensure human expert oversight. 
+% In legal or regulatory contexts, simpler and more transparent methods may be preferable. 
+% Finally, if you lack time to properly validate results, expertise to interpret outputs carefully, or resources to collect additional data when models reveal gaps, simpler methods may serve you better. 
+% A well-executed simple analysis beats a poorly executed sophisticated one.
 
 \section{Interactive Tutorials}
 
@@ -484,4 +484,7 @@ All notebooks include beginner-friendly explanations, error handling, troublesho
 The synthetic dataset includes 200 heritage buildings with 15 variables (construction year, district, material type, foundation type, temperature, rainfall, humidity, freeze-thaw cycles, soil moisture, crack width, salt deposition, condition rating, intervention urgency).
 
 
+
+\bibliographystyle{plain}
+\bibliography{bib}
 \end{document}
