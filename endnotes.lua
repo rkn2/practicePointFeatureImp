@@ -21,7 +21,7 @@ function Inlines(inlines)
       notes[num] = el.content
       table.insert(current_indices, num)
       
-      -- Look ahead for more notes
+      -- Look ahead for more notes, skipping any intervening punctuation/spaces
       local j = i + 1
       while j <= #inlines do
         local next_el = inlines[j]
@@ -33,8 +33,8 @@ function Inlines(inlines)
         elseif next_el.t == 'Space' then
            -- Skip spaces between notes
            j = j + 1
-        elseif next_el.t == 'Str' and next_el.text == ',' then
-            -- Skip commas between notes (if they exist in source)
+        elseif next_el.t == 'Str' and (next_el.text == ',' or next_el.text == '.' or next_el.text:match('^[,%.]+$')) then
+            -- Skip commas, periods, or combinations between notes
             j = j + 1
         else
            break
