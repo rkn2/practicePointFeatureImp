@@ -53,6 +53,13 @@ def add_figure_numbers(tex_file, output_file):
     fig_counter = 0
     
     for line in lines:
+        stripped_line = line.strip()
+        
+        # Skip commented out lines
+        if stripped_line.startswith('%'):
+            final_lines.append(line)
+            continue
+            
         if r'\begin{figure}' in line:
             in_figure = True
             fig_counter += 1
@@ -67,7 +74,9 @@ def add_figure_numbers(tex_file, output_file):
         if r'\caption{' in line:
             if in_figure and not in_subfigure:
                 # This is a main figure caption
-                line = line.replace(r'\caption{', f'\\caption{{Figure {fig_counter}: ')
+                # Check if it already has "Figure X:" to avoid double numbering if run multiple times
+                if not re.search(r'\\caption\{Figure \d+:', line):
+                    line = line.replace(r'\caption{', f'\\caption{{Figure {fig_counter}: ')
         
         final_lines.append(line)
 
