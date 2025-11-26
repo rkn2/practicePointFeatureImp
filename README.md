@@ -13,8 +13,9 @@ To use these tutorials, you need:
 ### Step 1: Get the Data
 First, you need to download the sample dataset to your computer.
 
-1.  **[Click here to download heritage_data.csv](https://raw.githubusercontent.com/rkn2/practicePointFeatureImp/main/heritage_data.csv)**
-2.  Save the file to a known location on your computer (e.g., your Downloads folder or Desktop).
+1.  **[Click here to view heritage_data.csv on GitHub](https://github.com/rkn2/practicePointFeatureImp/blob/main/heritage_data.csv)**
+2.  Click the **Download raw file** button (the icon that looks like a tray with a downward arrow) on the right side of the screen.
+3.  Save the file to a known location on your computer (e.g., your Downloads folder or Desktop).
 
 > **Note:** You will need to upload this file to Google Colab each time you start a new notebook.
 
