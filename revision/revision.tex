@@ -347,7 +347,7 @@ To ensure the stability of these rankings, $5$-fold or $10$-fold cross-validatio
 Finally, feature importance is computed by measuring the performance loss occurred when a specific variable is removed (permutation importance \cite{saarela2021}). 
 These results, ideally visualized as bar charts, should be interpreted in conjunction with preservation expertise.
 
-To ensure that identified features represent genuine predictive relationships rather than spurious correlations, we include random noise variables as a baseline benchmark. Three uncorrelated random variables (drawn from a standard normal distribution) are added to the feature set before model training. Any real feature scoring below these noise variables indicates weak or unreliable predictive power and should be excluded from interpretation. This approach provides an objective threshold for distinguishing meaningful predictors from statistical artifacts \cite{strobl2007}.
+To ensure that identified features represent genuine predictive relationships rather than spurious correlations, we include a random noise variable as a baseline benchmark. A random variable (drawn from a standard normal distribution) is added to the feature set before model training. Any real feature scoring below this noise variable indicates weak or unreliable predictive power and should be excluded from interpretation. This approach provides an objective threshold for distinguishing meaningful predictors from statistical artifacts \cite{strobl2007}.
 
 \begin{figure}[H]
     \centering
@@ -408,15 +408,8 @@ Computational analysis should be viewed as a tool that supports, rather than sup
 \subsection{Decision Framework: Reconciling Models with Field Observations}
 
 When translating model outputs into intervention priorities, visualizations help identify patterns that inform decision-making.
-Figure \ref{fig:material_boxplot} shows how condition ratings vary by material type, revealing material-specific vulnerabilities.
 Figure \ref{fig:spatial} maps predicted risk across building locations; geographic clustering of high-risk buildings suggests shared environmental exposures that warrant district-level rather than building-by-building interventions.
 
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.7\linewidth]{figures/boxplot_condition_by_material.png}
-    \caption{Distribution of condition ratings by material type. Box plots reveal median values (center line), quartiles (box edges), and outliers (points). Such visualizations help practitioners identify material-specific vulnerabilities and prioritize interventions accordingly.}
-    \label{fig:material_boxplot}
-\end{figure}
 
 \begin{figure}[H]
     \centering

@@ -41,11 +41,9 @@ def generate_permutation_importance():
     
     X = df[available_cols].fillna(df[available_cols].mean())
     
-    # Add random noise columns as benchmark
+    # Add random noise column as benchmark
     np.random.seed(42)
-    X['Random_Noise_1'] = np.random.randn(len(X))
-    X['Random_Noise_2'] = np.random.randn(len(X))
-    X['Random_Noise_3'] = np.random.randn(len(X))
+    X['Random_Noise'] = np.random.randn(len(X))
     
     y = df['Condition_Rating']
     

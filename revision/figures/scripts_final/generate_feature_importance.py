@@ -42,11 +42,9 @@ def generate_feature_importance():
     X = df.drop(columns=cols_to_drop)
     y = df[target]
     
-    # Add random noise columns as benchmark
+    # Add random noise column as benchmark
     np.random.seed(42)
-    X['Random_Noise_1'] = np.random.randn(len(X))
-    X['Random_Noise_2'] = np.random.randn(len(X))
-    X['Random_Noise_3'] = np.random.randn(len(X))
+    X['Random_Noise'] = np.random.randn(len(X))
     
     # Train-test split
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)

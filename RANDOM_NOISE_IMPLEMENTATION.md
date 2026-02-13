@@ -8,15 +8,13 @@ Added random noise benchmark to feature importance analysis to validate that ide
 ### 1. Notebook Updates (`03_feature_importance.ipynb`)
 - **Added new markdown cell** explaining the random noise benchmark concept
   - Why we add random noise (baseline validation)
-  - How it works (3 uncorrelated random variables)
+  - How it works (1 uncorrelated random variable)
   - Interpretation (features below noise are not meaningful)
   
-- **Added new code cell** that creates 3 random noise columns:
+- **Added new code cell** that creates 1 random noise column:
   ```python
   np.random.seed(42)
-  X['Random_Noise_1'] = np.random.randn(len(X))
-  X['Random_Noise_2'] = np.random.randn(len(X))
-  X['Random_Noise_3'] = np.random.randn(len(X))
+  X['Random_Noise'] = np.random.randn(len(X))
   ```
 
 ### 2. Figure Generation Scripts
@@ -41,10 +39,10 @@ Added random noise benchmark to feature importance analysis to validate that ide
 #### Added New Paragraph (after line 348)
 ```latex
 To ensure that identified features represent genuine predictive relationships 
-rather than spurious correlations, we include random noise variables as a 
-baseline benchmark. Three uncorrelated random variables (drawn from a standard 
-normal distribution) are added to the feature set before model training. Any 
-real feature scoring below these noise variables indicates weak or unreliable 
+rather than spurious correlations, we include a random noise variable as a 
+baseline benchmark. A random variable (drawn from a standard normal 
+distribution) is added to the feature set before model training. Any 
+real feature scoring below this noise variable indicates weak or unreliable 
 predictive power and should be excluded from interpretation. This approach 
 provides an objective threshold for distinguishing meaningful predictors from 
 statistical artifacts \cite{strobl2007}.
