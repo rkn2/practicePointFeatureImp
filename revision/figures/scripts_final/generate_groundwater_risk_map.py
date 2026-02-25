@@ -11,10 +11,10 @@ import os
 
 def generate_groundwater_risk_map():
     # Load data
-    if os.path.exists('../../processed_data.csv'):
+    if os.path.exists('../../../processed_data.csv'):
+        df = pd.read_csv('../../../processed_data.csv')
+    elif os.path.exists('../../processed_data.csv'):
         df = pd.read_csv('../../processed_data.csv')
-    elif os.path.exists('../processed_data.csv'):
-        df = pd.read_csv('../processed_data.csv')
     else:
         print("Error: processed_data.csv not found.")
         return
@@ -27,14 +27,13 @@ def generate_groundwater_risk_map():
     plt.grid(False)
     
     # Generate spatial coordinates if not present
-    # NOTE: Replace this with actual X/Y coordinates if available in your data
-    if 'x' not in df.columns or 'y' not in df.columns:
-        np.random.seed(42)  # For reproducibility
-        df['x'] = np.random.rand(len(df)) * 100
-        df['y'] = np.random.rand(len(df)) * 100
+    if 'Longitude' not in df.columns or 'Latitude' not in df.columns:
+        np.random.seed(42)  # Fallback for reproducible testing without data
+        df['Longitude'] = -77.8 + np.random.randn(len(df)) * 0.1
+        df['Latitude'] = 40.8 + np.random.randn(len(df)) * 0.1
     
     # Create scatter plot
-    scatter = plt.scatter(df['x'], df['y'], 
+    scatter = plt.scatter(df['Longitude'], df['Latitude'], 
                          c=df['Condition_Rating'], 
                          cmap='viridis', 
                          s=100, 
@@ -45,8 +44,8 @@ def generate_groundwater_risk_map():
     plt.colorbar(scatter, label='Condition Rating (1=Good, 5=Poor)')
     plt.title('Spatial Distribution of Building Condition\\n(Groundwater Risk Correlation)', 
               fontsize=14, fontweight='bold')
-    plt.xlabel('X Coordinate', fontsize=12)
-    plt.ylabel('Y Coordinate', fontsize=12)
+    plt.xlabel('Longitude', fontsize=12)
+    plt.ylabel('Latitude', fontsize=12)
     plt.tight_layout()
     
     # Save

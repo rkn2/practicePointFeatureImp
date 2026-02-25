@@ -347,7 +347,7 @@ To ensure the stability of these rankings, $5$-fold or $10$-fold cross-validatio
 Finally, feature importance is computed by measuring the performance loss occurred when a specific variable is removed (permutation importance \cite{saarela2021}). 
 These results, ideally visualized as bar charts, should be interpreted in conjunction with preservation expertise.
 
-To ensure that identified features represent genuine predictive relationships rather than spurious correlations, we include a random noise variable as a baseline benchmark. A random variable (drawn from a standard normal distribution) is added to the feature set before model training. Any real feature scoring below this noise variable indicates weak or unreliable predictive power and should be excluded from interpretation. This approach provides an objective threshold for distinguishing meaningful predictors from statistical artifacts \cite{strobl2007}.
+To ensure that identified features represent genuine predictive relationships rather than spurious correlations, we include a random noise variable as a baseline benchmark. A random variable (drawn from a standard normal distribution) is added to the feature set before model training. Any real feature scoring below this noise variable indicates weak or unreliable predictive power and should be excluded from interpretation. This approach provides an objective threshold for distinguishing meaningful predictors from statistical artifacts.
 
 \begin{figure}[H]
     \centering
