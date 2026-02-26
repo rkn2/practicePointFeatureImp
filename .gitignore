@@ -27,3 +27,6 @@ model_comparison.csv
 
 # Generated Plots
 *.png
+
+# Excluded scripts
+generate_qr.py

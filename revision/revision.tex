@@ -414,7 +414,7 @@ Figure \ref{fig:spatial} maps predicted risk across building locations; geograph
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.9\linewidth]{figures/groundwater_risk_map.png}
-    \caption{Spatial correlation between building risk and environmental factors. The clustering of high-risk buildings (red) overlaps with the high groundwater zone (blue shading), indicating a shared environmental driver. This visualization supports district-level interventions (e.g., drainage improvements) rather than isolated building repairs.}
+    \caption{Synthetic spatial correlation between building risk and environmental factors. The clustering of high-risk buildings (red) overlaps with the high groundwater zone (blue shading), indicating a shared environmental driver. This visualization supports district-level interventions (e.g., drainage improvements) rather than isolated building repairs.}
     \label{fig:spatial}
 \end{figure}
 
@@ -497,7 +497,14 @@ For datasets spanning decades, recent 10-15 year rolling windows often perform b
 
 \section{Interactive Tutorials}
 
-Five Google Colab notebooks provide hands-on training for practitioners with no programming experience. All code and data are available in the project repository: \url{https://github.com/rkn2/practicePointFeatureImp}. Start with Notebook 00 and work through sequentially. The interactive notebooks do not generate or prescribe conservation plans; instead, they apply analytical techniques to user-provided data and return interpretable outputs that practitioners evaluate using established conservation guidance, standards, and professional judgment. Selection and design of conservation actions remain the responsibility of the practitioner.
+Five Google Colab notebooks provide hands-on training for practitioners. All code and data are available in the project repository: \url{https://github.com/rkn2/practicePointFeatureImp}. Start with Notebook 00 and work through sequentially. The interactive notebooks do not generate or prescribe conservation plans; instead, they apply analytical techniques to user-provided data and return interpretable outputs that practitioners evaluate using established conservation guidance, standards, and professional judgment. Selection and design of conservation actions remain the responsibility of the practitioner.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.25\linewidth]{figures/repo_qr_code.png}
+    \caption{Scan this QR code or visit \url{https://github.com/rkn2/practicePointFeatureImp} to access all interactive computational notebooks and datasets.}
+    \label{fig:qr_code}
+\end{figure}
 
 \textbf{Data Preparation} (\href{https://colab.research.google.com/github/rkn2/practicePointFeatureImp/blob/main/00_data_preparation.ipynb}{\texttt{00\_data\_preparation.ipynb}}): File upload, data dictionary, handling missing values, one-hot encoding, standardization; includes optional multicollinearity check (VIF); outputs \texttt{processed\_data.csv}. Start here to clean and prepare your data.
 
@@ -507,10 +514,10 @@ Five Google Colab notebooks provide hands-on training for practitioners with no 
 
 \textbf{Feature Importance} (\href{https://colab.research.google.com/github/rkn2/practicePointFeatureImp/blob/main/03_feature_importance.ipynb}{\texttt{03\_feature\_importance.ipynb}}): Train-test split with temporal/spatial considerations, Random Forest and Gradient Boosting training, performance evaluation, model comparison; includes guidance on alternative models (Ridge, Lasso, Elastic Net, SVM, Neural Networks, KNN) with decision guide and learning resources; outputs \texttt{feature\_importance.csv} and \texttt{model\_comparison.csv}.
 
-\textbf{Visualization} (\href{https://colab.research.google.com/github/rkn2/practicePointFeatureImp/blob/main/04_visualization.ipynb}{\texttt{04\_visualization.ipynb}}): Correlation heatmaps, distribution plots, boxplots, pairplots, summary statistics; saves all plots as 300 DPI PNG files for publication.
+\textbf{Visualization} (\href{https://colab.research.google.com/github/rkn2/practicePointFeatureImp/blob/main/04_visualization.ipynb}{\texttt{04\_visualization.ipynb}}): Correlation heatmaps, distribution plots, boxplots, pairplots, summary statistics, and spatial risk mapping; saves all plots as 300 DPI PNG files for publication.
 
 All notebooks include beginner-friendly explanations, error handling, troubleshooting sections, and ``Next Steps" guidance. 
-The synthetic dataset includes 200 heritage buildings with 15 variables (construction year, district, material type, foundation type, temperature, rainfall, humidity, freeze-thaw cycles, soil moisture, crack width, salt deposition, condition rating, intervention urgency).
+The synthetic dataset includes 200 heritage buildings with 17 variables (construction year, district, material type, foundation type, temperature, rainfall, humidity, freeze-thaw cycles, soil moisture, crack width, salt deposition, latitude, longitude, condition rating, intervention urgency).
 
 
 
