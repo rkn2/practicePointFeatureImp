@@ -2,7 +2,7 @@
 
 Welcome! This repository contains a series of interactive tutorials designed to help heritage professionals use machine learning techniques—specifically Factor Analysis and Feature Importance—to prioritize preservation decisions.
 
-**No programming experience is required.** These tutorials run in your web browser using Google Colab.
+**Introductory Technical Barrier.** These tutorials are designed as a guided experience. While you don't need to be fluent in Python, a willingness to engage with script-based analysis, execute code cells, and follow built-in troubleshooting guides is necessary. These tutorials run in your web browser using Google Colab.
 
 ## 🚀 Getting Started
 
