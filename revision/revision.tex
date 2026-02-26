@@ -53,12 +53,13 @@ Data-driven analysis is not new to preservation; we have done quantitative work 
 What has changed is scale and accessibility.
 Modern machine learning algorithms process datasets impossible to handle twenty years ago \cite{amb2025}; cloud-based platforms like Google Colab \cite{googlecolab2025} eliminate the need for specialized software or expensive infrastructure; most important, we can now make these tools accessible to practitioners who have never written code \cite{neurond2024}.
 
-This practice point introduces two complementary techniques: \textit{factor analysis} for exploratory pattern discovery and \textit{feature importance analysis} for predictive modeling. 
-These serve distinct but related purposes. 
-Factor analysis helps you understand the structure of your data, discovering, for example, that humidity, rainfall, and groundwater levels form a coherent ``moisture-related" pattern. Feature importance analysis addresses a different question: given a specific outcome (like condition rating), which variables best predict it?
+This practice point introduces two complementary techniques: \textit{factor analysis} for exploratory pattern discovery and \textit{feature importance analysis} for predictive modeling. These serve distinct but related purposes and can be applied across component, building, and district scales.
+
 % We use factor analysis rather than Principal Component Analysis (PCA) because preservation practitioners benefit from interpretable, rotated factors that align with physical deterioration mechanisms. While PCA maximizes variance explained, factor analysis with rotation (like Varimax) produces factors that more clearly correspond to real-world processes—moisture exposure, thermal cycling, structural aging. This interpretability matters when communicating findings to stakeholders and translating results into conservation strategies.
-These techniques can be applied at any scale. 
-At the component level, they identify which environmental conditions most affect specific materials or structural elements; at the building scale, they prioritize interventions based on factors threatening overall integrity; at the district or city scale, they allocate resources across multiple sites by identifying shared vulnerabilities and site-specific risks.
+
+\textbf{Factor analysis} helps practitioners understand the underlying structure of their data by identifying hidden correlations. For example, when analyzing a district of heritage buildings, factor analysis might reveal that variables like high humidity, annual rainfall, and localized groundwater levels consistently move together to form a single ``moisture-related" vulnerability pattern. Recognizing this allows practitioners to identify shared vulnerabilities and propose systemic solutions, such as site drainage improvements, rather than treating individual building symptoms in isolation.
+
+\textbf{Feature importance analysis}, on the other hand, addresses a predictive question: given a specific target outcome---such as a building's overall condition rating---which variables are the strongest drivers? For instance, at the building or component scale, this analysis might isolate freeze-thaw cycles as the primary predictor of masonry deterioration, overriding other suspected environmental factors. This provides evidence-based prioritization, ensuring that interventions target the factors most threatening to overall structural integrity.
 
 In this practice point, we start with project planning to help you determine whether these techniques suit your project and what data you need. 
 Then we explain factor analysis and feature importance mechanics, with interactive notebooks guiding you through implementation. 
