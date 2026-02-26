@@ -30,3 +30,6 @@ model_comparison.csv
 
 # Excluded scripts
 generate_qr.py
+
+CONVERT_TO_WORD_GUIDE.md
+revision/
